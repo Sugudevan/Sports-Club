@@ -12,11 +12,12 @@ conn=mysql.connector.connect(
 def add_team():
     team_name = input("Enter team name: ")
     team_id = int(input("Enter the team id: "))
+    coach_name = input("enter the coach_name: ")
     cursor = conn.cursor()
-    cursor.execute("INSERT INTO teams (team_name,team_id) VALUES (%s,%s)", (team_name,team_id))
+    cursor.execute("INSERT INTO teams (team_name,team_id,coach_name) VALUES (%s,%s,%s)", (team_name,team_id,coach_name))
     conn.commit()
     print("Team added successfully!")
-    conn.close()
+    
 
 # Add a player
 def add_player():
@@ -31,7 +32,7 @@ def add_player():
     )
     conn.commit()
     print("Player added successfully!")
-    conn.close()
+
 
 # View all teams
 def view_teams():
@@ -40,15 +41,15 @@ def view_teams():
     teams = cursor.fetchall()
     print("\nTeams:")
     for team in teams:
-        print(f"ID: {team[0]}, Name: {team[1]}")
-    conn.close()    
+        print(f"ID: {team[0]}, Name: {team[1]},coach name: {team[2]}")
+     
 
 # View players in a team
 def view_players():
     team_id = int(input("Enter team ID to view players: "))
     cursor = conn.cursor()
     cursor.execute(
-        """SELECT p.player_id, p.player_name, p.age, t.team_name, p.position
+        """SELECT p.player_id, p.player_name, p.age, t.team_name, p.position,t.coach_name
             FROM players p
             join teams t
             on p.team_id = t.team_id
@@ -59,8 +60,8 @@ def view_players():
     players = cursor.fetchall()
     print("\nPlayers:")
     for player in players:
-        print(f"ID: {player[0]}\nName: {player[1]}\nAge: {player[2]}\nGame: {player[3]}\nPosition: {player[4]}")
-    conn.close()
+        print(f"ID: {player[0]}\nName: {player[1]}\nAge: {player[2]}\nGame: {player[3]}\nPosition: {player[4]}\ncoach: {player[5]}")
+    
 
 # Update a player's information
 def update_player():
@@ -75,7 +76,7 @@ def update_player():
     )
     conn.commit()
     print("Player information updated successfully!")
-    conn.close()    
+       
 
 # Delete a player
 def delete_player():
@@ -84,7 +85,7 @@ def delete_player():
     cursor.execute("DELETE FROM players WHERE player_id = %s", (player_id,))
     conn.commit()
     print("Player deleted successfully!")
-    conn.close()    
+       
 # Menu
 def menu():
     while True:

@@ -4,7 +4,8 @@ USE sports_club;
 
 CREATE TABLE teams (
     team_id INT PRIMARY KEY,
-    team_name VARCHAR(100) NOT NULL
+    team_name VARCHAR(100) NOT NULL,
+    coach_name varchar(100) not null
 );
 
 
