@@ -18,7 +18,6 @@ def add_team():
     conn.commit()
     print("Team added successfully!")
     
-
 # Add a player
 def add_player():
     player_name = input("Enter player name: ")
@@ -33,17 +32,15 @@ def add_player():
     conn.commit()
     print("Player added successfully!")
 
-
 # View all teams
 def view_teams():
     cursor = conn.cursor()
     cursor.execute("SELECT * FROM teams")
     teams = cursor.fetchall()
-    print("\nTeams:")
+    print("\nTeams: Total Teams",len(teams))
     for team in teams:
         print(f"ID: {team[0]}, Name: {team[1]},coach name: {team[2]}")
      
-
 # View players in a team
 def view_players():
     team_id = int(input("Enter team ID to view players: "))
@@ -55,13 +52,11 @@ def view_players():
             on p.team_id = t.team_id
             WHERE t.team_id = %s""",
             (team_id,)
-
     )
     players = cursor.fetchall()
-    print("\nPlayers:")
+    print("\nPlayers:","Total Players",len(players))
     for player in players:
         print(f"ID: {player[0]}\nName: {player[1]}\nAge: {player[2]}\nGame: {player[3]}\nPosition: {player[4]}\ncoach: {player[5]}")
-    
 
 # Update a player's information
 def update_player():
@@ -77,7 +72,6 @@ def update_player():
     conn.commit()
     print("Player information updated successfully!")
        
-
 # Delete a player
 def delete_player():
     player_id = int(input("Enter player ID to delete: "))
