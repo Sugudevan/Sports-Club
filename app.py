@@ -18,6 +18,7 @@ def add_team():
     conn.commit()
     print("Team added successfully!")
     
+
 # Add a player
 def add_player():
     player_name = input("Enter player name: ")
@@ -32,6 +33,7 @@ def add_player():
     conn.commit()
     print("Player added successfully!")
 
+
 # View all teams
 def view_teams():
     cursor = conn.cursor()
@@ -41,6 +43,7 @@ def view_teams():
     for team in teams:
         print(f"ID: {team[0]}, Name: {team[1]},coach name: {team[2]}")
      
+
 # View players in a team
 def view_players():
     team_id = int(input("Enter team ID to view players: "))
@@ -52,12 +55,24 @@ def view_players():
             on p.team_id = t.team_id
             WHERE t.team_id = %s""",
             (team_id,)
+
     )
     players = cursor.fetchall()
     print("\nPlayers:","Total Players",len(players))
     for player in players:
         print(f"ID: {player[0]}\nName: {player[1]}\nAge: {player[2]}\nGame: {player[3]}\nPosition: {player[4]}\ncoach: {player[5]}")
 
+# Individual Players"      
+def player():
+    name = input("Enter the Player Name: ")
+    team_id = int(input("Enter the Team ID: "))
+    cursor = conn.cursor()
+    cursor.execute("""SELECT player_id,player_name,age FROM players 
+               WHERE player_name = %s AND team_id = %s""",(name,team_id))
+    players = cursor.fetchall()
+    for player in players:
+        print(f"\nID: {player[0]}\nName: {player[1]}\nage: {player[2]}")
+        
 # Update a player's information
 def update_player():
     player_id = int(input("Enter player ID to update: "))
@@ -72,6 +87,7 @@ def update_player():
     conn.commit()
     print("Player information updated successfully!")
        
+
 # Delete a player
 def delete_player():
     player_id = int(input("Enter player ID to delete: "))
@@ -88,12 +104,14 @@ def menu():
         print("2. Add Player")
         print("3. View Teams")
         print("4. View Players in a Team")
-        print("5. Update Player Information")
-        print("6. Delete Player")
-        print("7. Exit")
+        print("5. Individual Players")
+        print("6. Update Player Information")
+        print("7. Delete Player")
+        print("8. Exit")
         choice = int(input("Enter your choice: "))
         
         if choice == 1:
+        
             add_team()
         elif choice == 2:
             add_player()
@@ -102,10 +120,12 @@ def menu():
         elif choice == 4:
             view_players()
         elif choice == 5:
-            update_player()
+            player()
         elif choice == 6:
-            delete_player()
+            update_player()
         elif choice == 7:
+            delete_player()
+        elif choice == 8:
             print("Exiting...")
             break
         else:
