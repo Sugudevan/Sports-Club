@@ -7,13 +7,12 @@ conn=mysql.connector.connect(
         password="14@Sugudevan",  # Replace with your MySQL password
         database="sports_club"
     )
-
+cursor = conn.cursor()
 # Add a team
 def add_team():
     team_name = input("Enter team name: ")
     team_id = int(input("Enter the team id: "))
     coach_name = input("enter the coach_name: ")
-    cursor = conn.cursor()
     cursor.execute("INSERT INTO teams (team_name,team_id,coach_name) VALUES (%s,%s,%s)", (team_name,team_id,coach_name))
     conn.commit()
     print("Team added successfully!")
@@ -25,7 +24,6 @@ def add_player():
     age = int(input("Enter player age: "))
     position = input("Enter player position: ")
     team_id = int(input("Enter team ID: "))
-    cursor = conn.cursor()
     cursor.execute(
         "INSERT INTO players (player_name, age, position, team_id) VALUES (%s, %s, %s, %s)",
         (player_name, age, position, team_id)
@@ -36,18 +34,17 @@ def add_player():
 
 # View all teams
 def view_teams():
-    cursor = conn.cursor()
     cursor.execute("SELECT * FROM teams")
     teams = cursor.fetchall()
     print("\nTeams: Total Teams",len(teams))
     for team in teams:
-        print(f"ID: {team[0]}, Name: {team[1]},coach name: {team[2]}")
+        print(f"ID: {team[0]}, Name: {team[1]},coach name: {team[2]}\n---------")
+        
      
 
 # View players in a team
 def view_players():
     team_id = int(input("Enter team ID to view players: "))
-    cursor = conn.cursor()
     cursor.execute(
         """SELECT p.player_id, p.player_name, p.age, t.team_name, p.position,t.coach_name
             FROM players p
@@ -60,15 +57,14 @@ def view_players():
     players = cursor.fetchall()
     print("\nPlayers:","Total Players",len(players))
     for player in players:
-        print(f"ID: {player[0]}\nName: {player[1]}\nAge: {player[2]}\nGame: {player[3]}\nPosition: {player[4]}\ncoach: {player[5]}")
-
+        print(f"ID: {player[0]}\nName: {player[1]}\nAge: {player[2]}\nGame: {player[3]}\nPosition: {player[4]}\ncoach: {player[5]}\n------")
 # Individual Players"      
 def player():
     name = input("Enter the Player Name: ")
     team_id = int(input("Enter the Team ID: "))
-    cursor = conn.cursor()
     cursor.execute("""SELECT player_id,player_name,age FROM players 
                WHERE player_name = %s AND team_id = %s""",(name,team_id))
+
     players = cursor.fetchall()
     for player in players:
         print(f"\nID: {player[0]}\nName: {player[1]}\nage: {player[2]}")
@@ -79,7 +75,6 @@ def update_player():
     new_name = input("Enter new player name: ")
     new_age = int(input("Enter new age: "))
     new_position = input("Enter new position: ")
-    cursor = conn.cursor()
     cursor.execute(
         "UPDATE players SET player_name = %s, age = %s, position = %s WHERE player_id = %s",
         (new_name, new_age, new_position, player_id)
@@ -91,7 +86,6 @@ def update_player():
 # Delete a player
 def delete_player():
     player_id = int(input("Enter player ID to delete: "))
-    cursor = conn.cursor()
     cursor.execute("DELETE FROM players WHERE player_id = %s", (player_id,))
     conn.commit()
     print("Player deleted successfully!")
@@ -109,9 +103,7 @@ def menu():
         print("7. Delete Player")
         print("8. Exit")
         choice = int(input("Enter your choice: "))
-        
         if choice == 1:
-        
             add_team()
         elif choice == 2:
             add_player()
